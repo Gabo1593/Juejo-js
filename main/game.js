@@ -7,42 +7,15 @@ const botonDow = document.querySelector('#down');
 let canvasSize;
 let elementsSize;
 
+window.addEventListener('load', setCanvasSize);
+window.addEventListener('resize', setCanvasSize);
+
 const playerPosition = {
 x: undefined,
 y: undefined,
 };
 
-//Botones de arriba/abajo/derecha/izquierda
-function botones (boton, direccion){
-  boton.addEventListener("click", ()=>{
-    console.log(direccion);
-  })
-}
-botones (botonUp, "arriba");
-botones (botonDow, "abajo");
-botones (botonLef, "izquierda");
-botones (botonRig, "derecha");
-
-//teclas de movimiento arriba/abajo/derecha/izquierda
-window.addEventListener("keydown",teclado)
-function teclado(event){
- if (event.key == "ArrowUp"){
-  playerPosition.y -= elementsSize;
-  movePlayer();
- }else if(event.key == "ArrowDown"){
-  console.log("abajo");
- }else if(event.key == "ArrowLeft"){
-  console.log("izquierda");
- }else if(event.key == "ArrowRight"){
-  console.log("derecha");
- }
-}
-
-
-
-window.addEventListener('load', setCanvasSize);
-window.addEventListener('resize', setCanvasSize);
-
+// Dimensiones del canvas
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
     canvasSize = window.innerWidth * 0.8;
@@ -69,6 +42,8 @@ function startGame() {
   const mapRowCol = mapRows.map(row => row.trim().split(""));
   console.log({map, mapRows, mapRowCol});
 
+  game.clearRect(0, 0, canvasSize, canvasSize);
+ 
   mapRowCol.forEach((row, rowI) => {
     row.forEach((col, colI) =>{
       const emoji = emojis[col];
@@ -76,9 +51,12 @@ function startGame() {
       const posY = elementsSize * (rowI + 1);
 
       if (col == "O"){
-        playerPosition.x = posX;
-        playerPosition.y = posY;
-        console.log({playerPosition})
+        if (!playerPosition.x && !playerPosition.y){
+          playerPosition.x = posX;
+          playerPosition.y = posY;
+          console.log({playerPosition})
+        }
+       
       }
 
       game.fillText(emoji, posX, posY);
@@ -91,3 +69,49 @@ function startGame() {
 function movePlayer(){
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
 }
+
+//funcion para los movimientos de teclas y botones
+function moveUp (){
+  playerPosition.y -= elementsSize;
+  startGame();
+}
+function moveDown (){
+  playerPosition.y += elementsSize;
+  startGame();
+}
+function moveRight (){
+  playerPosition.x += elementsSize;
+  startGame();
+}
+function moveLeft (){
+  playerPosition.x -= elementsSize;
+  startGame();
+}
+
+
+
+//teclas de movimiento arriba/abajo/derecha/izquierda
+window.addEventListener("keydown",teclado)
+function teclado(event){
+ if (event.key == "ArrowUp"){
+  moveUp ();
+ }else if(event.key == "ArrowDown"){
+  console.log("abajo");
+  moveDown();
+ }else if(event.key == "ArrowLeft"){
+  console.log("izquierda");
+  moveLeft ()
+ }else if(event.key == "ArrowRight"){
+  console.log("derecha");
+  moveRight ()
+ }
+}
+
+//Botones de arriba/abajo/derecha/izquierda
+botonUp.addEventListener("click", moveUp);
+botonDow.addEventListener("click", moveDown);
+botonLef.addEventListener("click", moveLeft);
+botonRig.addEventListener("click", moveRight);
+
+
+
