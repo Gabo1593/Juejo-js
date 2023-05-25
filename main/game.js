@@ -15,9 +15,8 @@ x: undefined,
 y: undefined,
 };
 
-const giftPosition = {
-
-};
+const giftPosition = {};
+let enemiesPositions = [];
 
 // Dimensiones del canvas
 function setCanvasSize() {
@@ -46,6 +45,7 @@ function startGame() {
   const mapRowCol = mapRows.map(row => row.trim().split(""));
   console.log({map, mapRows, mapRowCol});
 
+  enemiesPositions = [];
   game.clearRect(0, 0, canvasSize, canvasSize);
  
   mapRowCol.forEach((row, rowI) => {
@@ -64,6 +64,13 @@ function startGame() {
       }else if(col == "I"){
         giftPosition.x = posX;
         giftPosition.y = posY;
+      } 
+      // posicion de las bombas
+      else if(col == "X"){
+        enemiesPositions.push({
+          x: posX,
+          y: posY,
+        });
       }
 
       game.fillText(emoji, posX, posY);
@@ -83,6 +90,15 @@ giftPosition.y.toFixed(3);
 const giftCollision = giftCollisionX && giftCollisionY;
 if(giftCollision){
   console.log("Yupi!! Subiste de nivel")
+}
+
+const enemiesColision = enemiesPositions.find(enemy =>{
+  const enemiesColisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3);
+  const enemiesColisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3);
+  return enemiesColisionX && enemiesColisionY;
+});
+if(enemiesColision){
+  console.log("chocaste");
 }
 
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
