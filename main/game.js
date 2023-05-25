@@ -15,6 +15,10 @@ x: undefined,
 y: undefined,
 };
 
+const giftPosition = {
+
+};
+
 // Dimensiones del canvas
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
@@ -56,7 +60,10 @@ function startGame() {
           playerPosition.y = posY;
           console.log({playerPosition})
         }
-       
+       //posicion del regalo
+      }else if(col == "I"){
+        giftPosition.x = posX;
+        giftPosition.y = posY;
       }
 
       game.fillText(emoji, posX, posY);
@@ -67,6 +74,17 @@ function startGame() {
 
 //movimiento del personaje
 function movePlayer(){
+
+//Detecta colision entre el personaje y el regalo
+const giftCollisionX = playerPosition.x.toFixed(3) ==
+giftPosition.x.toFixed(3);
+const giftCollisionY = playerPosition.y.toFixed(3) ==
+giftPosition.y.toFixed(3);
+const giftCollision = giftCollisionX && giftCollisionY;
+if(giftCollision){
+  console.log("Yupi!! Subiste de nivel")
+}
+
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
   console.log(playerPosition.x, playerPosition.y);
 }
