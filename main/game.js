@@ -68,24 +68,43 @@ function startGame() {
 //movimiento del personaje
 function movePlayer(){
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
+  console.log(playerPosition.x, playerPosition.y);
 }
 
 //funcion para los movimientos de teclas y botones
 function moveUp (){
-  playerPosition.y -= elementsSize;
-  startGame();
+  if((playerPosition.y - elementsSize) < elementsSize){
+    console.log("No puedes salirte");
+  }else{
+    playerPosition.y -= elementsSize;
+    startGame();
+  }
+  
 }
 function moveDown (){
-  playerPosition.y += elementsSize;
-  startGame();
+  if((playerPosition.y + elementsSize) > canvasSize){
+    console.log("No puedes salirte");
+  }else{
+    playerPosition.y += elementsSize;
+    startGame();
+  }
 }
 function moveRight (){
-  playerPosition.x += elementsSize;
-  startGame();
+  if((playerPosition.x + elementsSize) > canvasSize){
+    console.log("No puedes salirte");
+  }else{
+    playerPosition.x += elementsSize;
+    startGame();
+  }
 }
 function moveLeft (){
-  playerPosition.x -= elementsSize;
-  startGame();
+  if((playerPosition.x - elementsSize) < elementsSize){
+    console.log("No puedes salirte");
+  }else{
+    playerPosition.x -= elementsSize;
+    startGame();
+  }
+  
 }
 
 
