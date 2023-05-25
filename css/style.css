@@ -15,7 +15,11 @@ body{background-color:indigo;
 canvas{
     border:4px solid #f60;
     border-radius:8px;
-    background-color:#feff9d
+    background-color:#feff9d;
+    margin-left: 20px;
+    /* margin-left: 36%; */
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .btns{
