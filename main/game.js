@@ -4,8 +4,11 @@ const botonUp = document.querySelector('#up');
 const botonLef = document.querySelector('#left');
 const botonRig = document.querySelector('#right');
 const botonDow = document.querySelector('#down');
+const parrafo = document.querySelector('p');
+const reinicio = document.querySelector("#reinicio");
 let canvasSize;
 let elementsSize;
+let level = 0;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -40,7 +43,12 @@ function startGame() {
   game.font = elementsSize + 'px Verdana';
   game.textAlign = 'end';
 
-  const map = maps[0];
+  const map = maps[level];
+  //Si no hay mas niveles se termina con la "gameWin()"
+  if (!map) {
+    gameWin();
+    return;
+  }
   const mapRows = map.trim().split("\n");
   const mapRowCol = mapRows.map(row => row.trim().split(""));
   console.log({map, mapRows, mapRowCol});
@@ -82,27 +90,44 @@ function startGame() {
 //movimiento del personaje
 function movePlayer(){
 
-//Detecta colision entre el personaje y el regalo
-const giftCollisionX = playerPosition.x.toFixed(3) ==
-giftPosition.x.toFixed(3);
-const giftCollisionY = playerPosition.y.toFixed(3) ==
-giftPosition.y.toFixed(3);
-const giftCollision = giftCollisionX && giftCollisionY;
-if(giftCollision){
-  console.log("Yupi!! Subiste de nivel")
-}
+  //Detecta colision entre el personaje y el regalo
+  const giftCollisionX = playerPosition.x.toFixed(3) ==
+  giftPosition.x.toFixed(3);
+  const giftCollisionY = playerPosition.y.toFixed(3) ==
+  giftPosition.y.toFixed(3);
+  const giftCollision = giftCollisionX && giftCollisionY;
 
-const enemiesColision = enemiesPositions.find(enemy =>{
+  if(giftCollision){
+   levelWin();
+  }
+
+  const enemiesColision = enemiesPositions.find(enemy =>{
   const enemiesColisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3);
   const enemiesColisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3);
   return enemiesColisionX && enemiesColisionY;
-});
-if(enemiesColision){
+  });
+  if(enemiesColision){
   console.log("chocaste");
-}
+  }
 
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
   console.log(playerPosition.x, playerPosition.y);
+}
+
+//Para subir de nivel
+function levelWin(){
+  console.log("subiste de nivel, Yupi!!");
+  level++;
+  startGame();
+}
+
+function gameWin(){
+  parrafo.innerText = "Ganaste!!"
+  
+  reinicio.addEventListener("click", ()=>{
+  location.reload();
+  })
+  reinicio.style.display =  "flex";
 }
 
 //funcion para los movimientos de teclas y botones
