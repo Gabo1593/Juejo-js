@@ -9,6 +9,7 @@ const reinicio = document.querySelector("#reinicio");
 let canvasSize;
 let elementsSize;
 let level = 0;
+let lives = 3;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -100,14 +101,15 @@ function movePlayer(){
   if(giftCollision){
    levelWin();
   }
-
+  //Colision con bombas
   const enemiesColision = enemiesPositions.find(enemy =>{
   const enemiesColisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3);
   const enemiesColisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3);
   return enemiesColisionX && enemiesColisionY;
   });
+
   if(enemiesColision){
-  console.log("chocaste");
+  levelFail();
   }
 
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
@@ -128,6 +130,17 @@ function gameWin(){
   location.reload();
   })
   reinicio.style.display =  "flex";
+}
+
+function levelFail(){
+  if (lives <= 0) {
+    level = 0
+  }
+  lives--;
+  console.log(lives);
+  playerPosition.x = undefined;
+  playerPosition.y = undefined;
+  startGame();
 }
 
 //funcion para los movimientos de teclas y botones
