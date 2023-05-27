@@ -9,6 +9,7 @@ const reinicio = document.querySelector("#reinicio");
 const mensajeWin = document.querySelector(".message__win");
 const tiempo = document.querySelector("#tiempo");
 const h1 = document.querySelector("h1");
+const record = document.querySelector("#record");
 let canvasSize;
 let elementsSize;
 let level = 0;
@@ -16,6 +17,7 @@ let lives = 3;
 let tiempoStart;
 let tiempoPlayer;
 let tiempoInterval;
+let mejorTiempo = undefined;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -45,7 +47,7 @@ function setCanvasSize() {
 }
 
 function startGame() {
-  console.log({ canvasSize, elementsSize });
+  // console.log({ canvasSize, elementsSize });
 
   game.font = elementsSize + 'px Verdana';
   game.textAlign = 'end';
@@ -64,7 +66,7 @@ function startGame() {
 
   const mapRows = map.trim().split("\n");
   const mapRowCol = mapRows.map(row => row.trim().split(""));
-  console.log({map, mapRows, mapRowCol});
+  // console.log({map, mapRows, mapRowCol});
 
   enemiesPositions = [];
   game.clearRect(0, 0, canvasSize, canvasSize);
@@ -79,7 +81,7 @@ function startGame() {
         if (!playerPosition.x && !playerPosition.y){
           playerPosition.x = posX;
           playerPosition.y = posY;
-          console.log({playerPosition})
+          // console.log({playerPosition})
         }
        //posicion del regalo
       }else if(col == "I"){
@@ -125,24 +127,32 @@ function movePlayer(){
   }
 
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
-  console.log(playerPosition.x, playerPosition.y);
+  // console.log(playerPosition.x, playerPosition.y);
 }
 
 //Para subir de nivel
 function levelWin(){
-  console.log("subiste de nivel, Yupi!!");
   level++;
   startGame();
 }
 
 function temporizador(){
-tiempo.innerHTML = Date.now() - tiempoStart;
+tiempoPlayer = (Date.now() - tiempoStart)/1000;
+tiempo.innerHTML = tiempoPlayer
 }
 
 function gameWin(){
   clearInterval(tiempoInterval);
-  parrafo.innerText = "Ganaste!!"
+  h1.innerText = `Ganaste!! 🎉🎉🎉 tu tiempo es ${tiempoPlayer} `;
   mensajeWin.style.display =  "flex";
+  if (mejorTiempo == undefined) {
+    mejorTiempo = tiempoPlayer;  
+    localStorage.setItem("Mejor tiempo", tiempoPlayer);
+  }else if(mejorTiempo >= tiempoPlayer){
+    localStorage.setItem("Mejor tiempo", tiempoPlayer);
+  }
+  
+
 }
 
 function levelFail(){
@@ -209,13 +219,10 @@ function teclado(event){
  if (event.key == "ArrowUp"){
   moveUp ();
  }else if(event.key == "ArrowDown"){
-  console.log("abajo");
   moveDown();
  }else if(event.key == "ArrowLeft"){
-  console.log("izquierda");
   moveLeft ()
  }else if(event.key == "ArrowRight"){
-  console.log("derecha");
   moveRight ()
  }
 }
@@ -229,4 +236,6 @@ botonRig.addEventListener("click", moveRight);
 
 reinicio.addEventListener("click", ()=>{
   location.reload();
-  })
+})
+
+record.innerHTML = mejorTiempo
