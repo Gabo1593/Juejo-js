@@ -30,10 +30,10 @@ function setCanvasSize() {
     canvasSize = window.innerHeight * 0.8;
   }
   
-  canvas.setAttribute('width', canvasSize);
-  canvas.setAttribute('height', canvasSize);
+  canvas.setAttribute('width', Math.round(canvasSize) );
+  canvas.setAttribute('height', Math.round(canvasSize));
   
-  elementsSize = canvasSize / 10;
+  elementsSize = Math.round((canvasSize / 10)-3);
 
   startGame();
 }
@@ -92,10 +92,10 @@ function startGame() {
 function movePlayer(){
 
   //Detecta colision entre el personaje y el regalo
-  const giftCollisionX = playerPosition.x.toFixed(3) ==
-  giftPosition.x.toFixed(3);
-  const giftCollisionY = playerPosition.y.toFixed(3) ==
-  giftPosition.y.toFixed(3);
+  const giftCollisionX = playerPosition.x.toFixed(1) ==
+  giftPosition.x.toFixed(1);
+  const giftCollisionY = playerPosition.y.toFixed(1) ==
+  giftPosition.y.toFixed(1);
   const giftCollision = giftCollisionX && giftCollisionY;
 
   if(giftCollision){
@@ -103,8 +103,8 @@ function movePlayer(){
   }
   //Colision con bombas
   const enemiesColision = enemiesPositions.find(enemy =>{
-  const enemiesColisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3);
-  const enemiesColisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3);
+  const enemiesColisionX = enemy.x.toFixed(1) == playerPosition.x.toFixed(1);
+  const enemiesColisionY = enemy.y.toFixed(1) == playerPosition.y.toFixed(1);
   return enemiesColisionX && enemiesColisionY;
   });
 
@@ -133,10 +133,16 @@ function gameWin(){
 }
 
 function levelFail(){
-  if (lives <= 0) {
-    level = 0
+  if (lives <= 1) {
+    location.reload();
   }
   lives--;
+  if (lives == 2) {
+    parrafo.innerText = `Vidas = 💙💙`
+  }else if(lives == 1){
+    parrafo.innerText = `Vidas = 💙`
+  }
+  
   console.log(lives);
   playerPosition.x = undefined;
   playerPosition.y = undefined;
