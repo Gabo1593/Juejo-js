@@ -56,8 +56,21 @@ p{
     width:100%;
     color: red;
 }
-.messages button{
+
+
+.message__win{
     display: none;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 50%;
+    z-index: 10;
+    background-color: #f60;
+    margin-left: 25%;
+    margin-top: 25%;
+    border-radius: 20px;
 }
 
 @media(max-width:440px){

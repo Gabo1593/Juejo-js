@@ -6,10 +6,16 @@ const botonRig = document.querySelector('#right');
 const botonDow = document.querySelector('#down');
 const parrafo = document.querySelector('p');
 const reinicio = document.querySelector("#reinicio");
+const mensajeWin = document.querySelector(".message__win");
+const tiempo = document.querySelector("#tiempo");
+const h1 = document.querySelector("h1");
 let canvasSize;
 let elementsSize;
 let level = 0;
 let lives = 3;
+let tiempoStart;
+let tiempoPlayer;
+let tiempoInterval;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -50,6 +56,12 @@ function startGame() {
     gameWin();
     return;
   }
+//Se marca el tiempo del inicio del juego
+  if (!tiempoStart){
+    tiempoStart = Date.now();
+    tiempoInterval = setInterval(temporizador, 100);
+  }
+
   const mapRows = map.trim().split("\n");
   const mapRowCol = mapRows.map(row => row.trim().split(""));
   console.log({map, mapRows, mapRowCol});
@@ -123,18 +135,22 @@ function levelWin(){
   startGame();
 }
 
+function temporizador(){
+tiempo.innerHTML = Date.now() - tiempoStart;
+}
+
 function gameWin(){
+  clearInterval(tiempoInterval);
   parrafo.innerText = "Ganaste!!"
-  
-  reinicio.addEventListener("click", ()=>{
-  location.reload();
-  })
-  reinicio.style.display =  "flex";
+  mensajeWin.style.display =  "flex";
 }
 
 function levelFail(){
   if (lives <= 1) {
-    location.reload();
+    clearInterval(tiempoInterval);
+    parrafo.innerText = "Ganaste!!";
+    h1.innerText = "Perdiste!! 😥😥"
+    mensajeWin.style.display =  "flex";
   }
   lives--;
   if (lives == 2) {
@@ -211,4 +227,6 @@ botonLef.addEventListener("click", moveLeft);
 botonRig.addEventListener("click", moveRight);
 
 
-
+reinicio.addEventListener("click", ()=>{
+  location.reload();
+  })
