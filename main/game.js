@@ -17,7 +17,7 @@ let lives = 3;
 let tiempoStart;
 let tiempoPlayer;
 let tiempoInterval;
-let mejorTiempo = undefined;
+let mejorTiempo;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -43,6 +43,8 @@ function setCanvasSize() {
   
   elementsSize = Math.round((canvasSize / 10)-3);
 
+  playerPosition.x = undefined;
+  playerPosition.y = undefined;
   startGame();
 }
 
@@ -62,6 +64,8 @@ function startGame() {
   if (!tiempoStart){
     tiempoStart = Date.now();
     tiempoInterval = setInterval(temporizador, 100);
+    record.innerHTML = localStorage.getItem("recorTime");
+
   }
 
   const mapRows = map.trim().split("\n");
@@ -143,23 +147,32 @@ tiempo.innerHTML = tiempoPlayer
 
 function gameWin(){
   clearInterval(tiempoInterval);
+  
+  // mejorTiempo = localStorage.getItem("Mejor tiempo", tiempoPlayer);
+  if (mejorTiempo){
+    if(mejorTiempo >= tiempoPlayer){
+      localStorage.setItem("recorTime", tiempoPlayer);
+      console.log("Superaste el record");
+    }else{
+      console.log("no superaste el record");
+    }
+  }else{
+    localStorage.setItem("recorTime", tiempoPlayer);
+  }
+
+  console.log({mejorTiempo, tiempoPlayer});
+
+  
   h1.innerText = `Ganaste!! 🎉🎉🎉 tu tiempo es ${tiempoPlayer} `;
   mensajeWin.style.display =  "flex";
-  if (mejorTiempo == undefined) {
-    mejorTiempo = tiempoPlayer;  
-    localStorage.setItem("Mejor tiempo", tiempoPlayer);
-  }else if(mejorTiempo >= tiempoPlayer){
-    localStorage.setItem("Mejor tiempo", tiempoPlayer);
-  }
-  
-
 }
 
 function levelFail(){
   if (lives <= 1) {
     clearInterval(tiempoInterval);
     parrafo.innerText = "Ganaste!!";
-    h1.innerText = "Perdiste!! 😥😥"
+    h1.innerText = "Perdiste!! 😥😥";
+    parrafo.innerText = `Perdiste`;
     mensajeWin.style.display =  "flex";
   }
   lives--;
@@ -169,7 +182,7 @@ function levelFail(){
     parrafo.innerText = `Vidas = 💙`
   }
   
-  console.log(lives);
+  // console.log(lives);
   playerPosition.x = undefined;
   playerPosition.y = undefined;
   startGame();
@@ -238,4 +251,5 @@ reinicio.addEventListener("click", ()=>{
   location.reload();
 })
 
-record.innerHTML = mejorTiempo
+
+
