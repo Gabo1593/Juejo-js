@@ -13,7 +13,7 @@ body{
     align-items: center;
 }
 
-.game-container{
+.game__container{
     display:flex;
     align-items:center;
     justify-content:center;
@@ -85,10 +85,11 @@ p{
     background-color: #f60;
     margin-top: 12%;
     border-radius: 20px;
+    text-align: center;
 }
 
-@media(max-width:440px){
-    button{margin-top:5px}
+@media(max-width:540px){
+    button{margin-top:25px}
     #up,#down{margin-left:100%;
         margin-right:100%;
     }
